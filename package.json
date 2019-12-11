@@ -1,0 +1,16 @@
+{
+  "name": "maybe-ts",
+  "version": "0.0.1",
+  "description": "A lightweight Maybe type for fp-ts",
+  "license": "MIT",
+  "devDependencies": {
+    "@code-surfer/themes": "^3.0.0",
+    "fp-ts": "^2.3.0",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
+  },
+  "peerDependencies": {
+    "fp-ts": "^2.3",
+    "typescript": ">=3.7"
+  }
+}
