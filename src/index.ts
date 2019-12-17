@@ -15,6 +15,7 @@ import { Compactable1, Separated } from "fp-ts/lib/Compactable";
 import { toNullable } from "fp-ts/lib/Option";
 import { Filterable1 } from "fp-ts/lib/Filterable";
 import { isRight } from "fp-ts/lib/Either";
+import { Eq } from "fp-ts/lib/Eq";
 
 declare module "fp-ts/lib/HKT" {
   export interface URItoKind<A> {
@@ -28,6 +29,7 @@ type URI = "Maybe";
 // This is useless without strictNullChecks
 export type Nothing = null | undefined;
 export const Nothing = null as Nothing;
+export const just = identity;
 export type Maybe<T> = T | Nothing;
 
 export const isNothing = (x: Maybe<unknown>): x is Nothing => x == null;
@@ -137,3 +139,11 @@ export const maybe: Monad1<URI> &
 };
 
 export const pipeable = makePipeable(maybe);
+
+export function liftEq<T>(E: Eq<T>): Eq<Maybe<T>> {
+  return {
+    equals: (x, y) =>
+      x === y ||
+      (isNothing(x) ? isNothing(y) : isNothing(y) ? false : E.equals(x, y))
+  };
+}

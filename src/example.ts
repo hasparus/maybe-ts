@@ -1,6 +1,5 @@
 import { flow } from "fp-ts/lib/function";
 import { monoidAny } from "fp-ts/lib/Monoid";
-import { head } from "fp-ts/lib/NonEmptyArray";
 
 import { pipeable as maybe, Nothing } from "./index";
 
@@ -26,10 +25,10 @@ const foughtBatman = (actor: string) => {
 };
 
 const isGoodJoker = flow(
-  (actor: string) =>
-    jokerScores.has(actor)
-      ? ([actor, jokerScores.get(actor)!] as const)
-      : Nothing,
+  (actor: string) => {
+    const score = jokerScores.get(actor);
+    return score ? ([actor, score] as const) : Nothing;
+  },
   maybe.filter(([actor]) => foughtBatman(actor)),
   maybe.map(([_, score]) => score ** 3 / 10),
   maybe.filter(x => String(x)[0] !== "3"),
