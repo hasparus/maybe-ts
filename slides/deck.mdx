@@ -18,29 +18,30 @@ export const theme = {
   styles: {
     pre: {
       ...prismNightOwl,
+      margin: 0,
+      textAlign: 'left',
     },
+    li: {
+      margin: '0.25em 0',
+      listStylePosition: 'inside',
+      textAlign: 'left',
+      code: {
+        bg: 'rgba(27,31,35,.04)',
+        fontSize: '0.875em',
+        borderRadius: '5px',
+      }
+    }
   }
 };
 
 <Head>
-  {/* https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/openmoji/213/black-question-mark-ornament_2753.png */}
   <title>maybe-ts</title>
+  <link rel="shortcut icon" href="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/openmoji/213/black-question-mark-ornament_2753.png"/>
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@hasparus" />
   <meta name="twitter:title" content="maybe-ts" />
   <meta name="twitter:description" content="A lightweight Maybe type for fp-ts" />
   <meta name="twitter:image" content="https://images.unsplash.com/photo-1518644730709-0835105d9daa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1200" />
-  <style>{`
-    li {
-      margin: 0.25em 0;
-      list-style-position: inside;
-      text-align: left;
-    }
-    pre {
-      margin: 0;
-      text-align: left;
-    }
-  `}</style>
 </Head>
 
 
@@ -296,6 +297,19 @@ export const maybe: Monad1<URI> &
 };
 ```
 </CodeSurfer>
+
+---
+
+<div className="list-style-none">
+
+<style>{`.list-style-none li { list-style: none } `}</style>
+
+- ✔ optional chaining (`.?`) and nullish coalescing (`??`) just works&trade;
+- ✔ `Nothing` is properly empty value `(Nothing == null) === true`
+- ✔ relaxing a requirement is a compatible change
+- ✔ strengthening a promise is a compatible change
+
+</div>
 
 ---
 
