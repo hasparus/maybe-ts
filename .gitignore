@@ -1,2 +1,4 @@
 node_modules
 public
+dist
+.rts2_cache_modern
