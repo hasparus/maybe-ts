@@ -19,6 +19,14 @@ export type Maybe<T> = T | Nothing;
 - [x] [Compactable1](https://github.com/gcanti/fp-ts/blob/master/src/Compactable.ts)
 - [x] [Filterable1](https://github.com/gcanti/fp-ts/blob/master/src/Filterable.ts)
 
+## Installation
+
+```
+npm install @hasparus/maybe-ts
+
+yarn add @hasparus/maybe-ts
+```
+
 ## Requirements
 
 ```

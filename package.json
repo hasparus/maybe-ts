@@ -1,5 +1,5 @@
 {
-  "name": "maybe-ts",
+  "name": "@hasparus/maybe-ts",
   "version": "0.0.1",
   "description": "A lightweight Maybe type for fp-ts",
   "license": "MIT",
@@ -7,6 +7,9 @@
     "name": "Piotr Monwid-Olechnowicz",
     "email": "hasparus@gmail.com"
   },
+  "files": [
+    "dist"
+  ],
   "main": "dist/maybe-ts.umd.js",
   "module": "dist/maybe-ts.modern.js",
   "types": "dist/maybe-ts.d.ts",
