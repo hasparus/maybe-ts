@@ -35,10 +35,9 @@ export type Maybe<T> = T | Nothing;
 export const isNothing = (x: Maybe<unknown>): x is Nothing => x == null;
 export const isDefined = <T>(x: Maybe<T>): x is T => x != null;
 
-export const chain: Chain1<URI>["chain"] = (fa, f) =>
-  fa == null ? null : f(fa);
+export const map: Functor1<URI>["map"] = (fa, f) => (fa == null ? null : f(fa));
 
-export const map: Functor1<URI>["map"] = chain;
+export const chain: Chain1<URI>["chain"] = map;
 
 export const ap: Apply1<URI>["ap"] = (fab, fa) =>
   fa == null ? null : fab?.(fa);

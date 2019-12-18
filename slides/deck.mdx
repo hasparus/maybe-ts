@@ -1,0 +1,316 @@
+import { Head, Image, Split } from 'mdx-deck';
+import { prism } from '@mdx-deck/themes';
+import { CodeSurfer } from "code-surfer";
+import { nightOwl as codeSurferNightOwl } from "@code-surfer/themes";
+import prismNightOwl from '@theme-ui/prism/presets/night-owl';
+import Prism from '@theme-ui/prism';
+
+
+export const theme = {
+  fonts: {
+    body: 'system-ui, sans-serif',
+    monospace: "'Fira Code', 'Hack', monospace"
+  },
+  components: {
+    pre: props => props.children,
+    code: Prism,
+  },
+  styles: {
+    pre: {
+      ...prismNightOwl,
+    },
+  }
+};
+
+<Head>
+  {/* https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/openmoji/213/black-question-mark-ornament_2753.png */}
+  <title>maybe-ts</title>
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@hasparus" />
+  <meta name="twitter:title" content="maybe-ts" />
+  <meta name="twitter:description" content="A lightweight Maybe type for fp-ts" />
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1518644730709-0835105d9daa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1200" />
+  <style>{`
+    li {
+      margin: 0.25em 0;
+      list-style-position: inside;
+      text-align: left;
+    }
+    pre {
+      margin: 0;
+      text-align: left;
+    }
+  `}</style>
+</Head>
+
+
+# maybe-ts
+
+---
+
+# wtf am i here?
+
+- https://twitter.com/hasparus
+- `fp-ts` `Option` isn't cool, it ain't better than null
+- write your own fp-ts typeclass instances
+
+---
+
+# problems with fp-ts Option
+
+---
+
+# wtf is Option?
+
+```tsx
+interface None {
+  readonly _tag: 'None'
+}
+interface Some<A> {
+  readonly _tag: 'Some'
+  readonly value: A
+}
+type Option<A> = None | Some<A>
+```
+
+---
+
+<Split>
+
+<div style={{ fontSize: '0.625em' }}>
+
+```tsx
+interface None {
+  readonly _tag: 'None'
+}
+interface Some<A> {
+  readonly _tag: 'Some'
+  readonly value: A
+}
+type Option<A> = None | Some<A>
+```
+
+</div>
+
+<h2 style={{ whiteSpace: 'pre', marginLeft: '1em' }}>small problems</h2>
+
+- None is truthy
+
+</Split>
+
+---
+
+<Split>
+
+<div style={{ fontSize: '0.625em' }}>
+
+```tsx
+interface None {
+  readonly _tag: 'None'
+}
+interface Some<A> {
+  readonly _tag: 'Some'
+  readonly value: A
+}
+type Option<A> = None | Some<A>
+```
+
+</div>
+
+<h2 style={{ whiteSpace: 'pre', marginLeft: '1em' }}>small problems</h2>
+
+- None is truthy
+- Can't use `??` and `.?`
+
+</Split>
+
+
+
+---
+
+# big problems
+
+- relaxing a requirement should be a compatible change
+- strengthening a promise should be a compatible change
+
+---
+
+<!-- 2 following slides are stolen from Rich Hickey's Maybe Not -->
+
+import argOptionalPng from './arg-optional.png';
+
+<Image src={argOptionalPng} style={{ backgroundSize: 'contain' }} />
+
+---
+
+import strongerReturnPng from './stronger-return.png';
+
+<Image src={strongerReturnPng} style={{ backgroundSize: 'contain' }} />
+
+---
+
+# implementing typeclass instance
+
+---
+
+<CodeSurfer theme={codeSurferNightOwl}>
+
+```ts
+type Maybe<T> = T | null | undefined;
+```
+```ts
+type Nothing = null | undefined;
+const Nothing = null as Nothing;
+
+type Maybe<T> = T | null | undefined;
+```
+```ts
+type Nothing = null | undefined;
+const Nothing = null as Nothing;
+
+type Maybe<T> = T | Nothing;
+```
+```ts
+type Nothing = null | undefined;
+const Nothing = null as Nothing;
+
+const just = identity;
+
+type Maybe<T> = T | Nothing;
+```
+```ts
+export const isNothing = (x: Maybe<unknown>): x is Nothing => x == null;
+
+export const isDefined = <T>(x: Maybe<T>): x is T => x != null;
+```
+```ts
+declare module "fp-ts/lib/HKT" {
+  export interface URItoKind<A> {
+    Maybe: Maybe<A>;
+  }
+}
+
+const URI = "Maybe";
+type URI = "Maybe";
+
+export const maybe = {
+  URI,
+}
+```
+```ts
+// fp-ts
+interface Functor1<F extends URIS> {
+    readonly URI: F;
+    readonly map: <A, B>(fa: Kind<F, A>, f: (a: A) => B) => Kind<F, B>;
+}
+
+// index.ts
+
+export const map: Functor1<URI>["map"] = (fa, f) => (fa == null ? null : f(fa));
+
+export const maybe: Functor1<URI> = {
+  URI,
+  map,
+}
+```
+```ts
+// fp-ts
+interface Apply1<F extends URIS> extends Functor1<F> {
+    readonly ap: <A, B>(fab: Kind<F, (a: A) => B>, fa: Kind<F, A>) => Kind<F, B>;
+}
+
+// index.ts
+
+export const ap: Apply1<URI>["ap"] = (fab, fa) =>
+  fa == null ? null : fab?.(fa);
+
+export const maybe: Apply1<URI> = {
+  URI,
+  map,
+  ap,
+}
+```
+```ts
+// fp-ts
+interface Applicative1<F extends URIS> extends Apply1<F> {
+    readonly of: <A>(a: A) => Kind<F, A>;
+}
+
+// index.ts
+
+export const of: Applicative1<URI>["of"] = identity;
+
+export const maybe: Applicative1<URI> = {
+  URI,
+  map,
+  ap,
+  of,
+}
+```
+```ts
+// fp-ts
+interface Chain1<F extends URIS> extends Apply1<F> {
+    readonly chain: <A, B>(fa: Kind<F, A>, f: (a: A) => Kind<F, B>) => Kind<F, B>;
+}
+interface Monad1<F extends URIS> extends Applicative1<F>, Chain1<F> {}
+
+// index.ts
+
+export const chain: Chain1<URI>["chain"] = map;
+
+export const maybe: Monad1<URI> = {
+  URI,
+  map,
+  ap,
+  of,
+  chain,
+}
+```
+```ts
+export const maybe: Monad1<URI> &
+  Foldable1<URI> &
+  Traversable1<URI> &
+  Alternative1<URI> &
+  Extend1<URI> &
+  Compactable1<URI> &
+  Filterable1<URI> = {
+  URI,
+  map,
+  ap,
+  of,
+  chain,
+  foldMap,
+  reduce,
+  reduceRight,
+  sequence,
+  traverse,
+  zero,
+  alt,
+  extend,
+  compact,
+  separate,
+  filter,
+  filterMap,
+  partition,
+  partitionMap
+};
+```
+</CodeSurfer>
+
+---
+
+```
+npm install maybe-ts
+
+yarn add maybe-ts
+```
+
+---
+
+# Thank You!
+
+<img
+  style={{ width: 800, maxWidth: '100%' }}
+  alt="a wrestler in pink underwear bowing down and smiling"
+  src="https://media0.giphy.com/media/6O7ybdmHHJfoc/giphy.gif?cid=790b76113b02e0e874f07d20b4ebf97411eb599b30a29342&rid=giphy.gif"
+/>

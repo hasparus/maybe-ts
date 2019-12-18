@@ -4,10 +4,14 @@
   "description": "A lightweight Maybe type for fp-ts",
   "license": "MIT",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "deck": "mdx-deck slides/deck.mdx",
+    "deck:build": "mdx-deck build slides/deck.mdx"
   },
   "devDependencies": {
     "@code-surfer/themes": "^3.0.0",
+    "@mdx-deck/themes": "^3.0.8",
+    "@theme-ui/prism": "^0.2.50",
     "@types/jest": "^24.0.23",
     "code-surfer": "^3.0.0",
     "fast-check": "^1.20.1",
@@ -22,5 +26,9 @@
   "peerDependencies": {
     "fp-ts": "^2.3",
     "typescript": ">=3.7"
+  },
+  "resolutions": {
+    "mdx-deck/**/gatsby": "2.18.4",
+    "mdx-deck/**/gatsby-plugin-compile-es6-packages": "2.1.0"
   }
 }
