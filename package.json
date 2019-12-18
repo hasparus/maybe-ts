@@ -18,7 +18,7 @@
     "build": "microbundle -f modern,umd",
     "deck": "mdx-deck slides/deck.mdx",
     "deck:build": "mdx-deck build slides/deck.mdx",
-    "deck:deploy": "now -n maybe-ts public",
+    "deck:deploy": "now -n maybe-ts --prod public",
     "test": "jest"
   },
   "devDependencies": {
