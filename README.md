@@ -39,8 +39,6 @@ TypeScript >= 3.7
 Found a bug? Have an idea for improvements?
 Feel free to shoot a PR!
 
-There's only one convention you should stick to. Use [gitmoji](https://github.com/carloscuesta/gitmoji-cli). I'm dead serious.
-
 ---
 
 Slides: https://maybe-ts.now.sh/
