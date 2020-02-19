@@ -13,7 +13,7 @@ export type Maybe<T> = T | Nothing;
 
 Edit: Not really. This is not a functor over nullables.
 
-counterexample to functor composition law:
+counterexample to composition law of the functor:
 
 ![](https://i.imgur.com/kdS3zVL.png)
 
