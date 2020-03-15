@@ -11,7 +11,7 @@ export type Maybe<T> = T | Nothing;
 
 ### 🤹‍♂️ Instance of your favorite type classes
 
-Edit: Not really. This is not a functor over nullables.
+Edit: Not really. This is not a functor over nullables. I wrote about it at [haspar.us/speaking/maybe-ts](https://haspar.us/speaking/maybe-ts).
 
 counterexample to composition law of the functor:
 
